@@ -1,0 +1,225 @@
+Headers
+# H1 Title
+
+## H2 Title
+
+### H3 Title
+
+Natija:
+
+H1 → 34px oq
+H2 → 26px yashil
+H3 → 20px och yashil
+Paragraph
+Bu oddiy matn.
+
+Bu boshqa paragraph.
+Bold
+Bu **juda muhim** ma'lumot.
+
+Natija:
+
+juda muhim
+
+Italic
+Bu *italic* text.
+
+Natija:
+
+italic
+
+Inline Code
+`SELECT * FROM users`
+
+Natija:
+
+yashil fonli kichik code block.
+
+Code Block
+
+Javascript:
+
+```js
+const user =
+await prisma.user.findFirst();
+```
+
+Typescript:
+
+```ts
+const user =
+await prisma.user.findFirst();
+```
+
+SQL:
+
+```sql
+SELECT * FROM users;
+```
+
+Bash:
+
+```bash
+npm install prisma
+npx prisma generate
+```
+
+Terminal:
+
+```terminal
+root@server:~$
+npm install
+```
+
+JSON:
+
+```json
+{
+  "success": true
+}
+```
+
+Python:
+
+```python
+print("hello")
+```
+
+Java:
+
+```java
+public class Main {}
+```
+
+C++:
+
+```cpp
+int main(){}
+```
+
+Go:
+
+```go
+func main(){}
+```
+
+Rust:
+
+```rust
+fn main(){}
+```
+
+PHP:
+
+```php
+echo "hello";
+```
+Quote
+> SQL Injection hali ham OWASP Top 10 ichida.
+
+Natija:
+
+Chap tomonda yashil chiziqli block.
+
+Checklist
+- JWT Authentication
+- Prisma ORM
+- Validation
+- Swagger
+
+Natija:
+
+✓ JWT Authentication
+✓ Prisma ORM
+✓ Validation
+✓ Swagger
+Numbered List
+1. Install PostgreSQL
+2. Install Prisma
+3. Generate Client
+4. Run Migration
+Divider
+---
+
+Natija:
+
+yashil separator chiziq.
+
+Table
+| Username | Level | XP |
+|----------|-------|----|
+| Ali      | 5     | 500 |
+| John     | 7     | 950 |
+
+Natija:
+
+Username	Level	XP
+Ali	5	500
+John	7	950
+Warning Block
+!!!warning
+Never trust user input.
+!!!
+Success Block
+!!!success
+Login successful.
+!!!
+Error Block
+!!!danger
+DROP TABLE users;
+!!!
+Info Block
+!!!info
+Prepared Statements recommended.
+!!!
+Image
+![SQL Injection](https://example.com/sql.png)
+
+Render:
+
+<Image />
+Video
+@[video](https://video-url.mp4)
+
+Render:
+
+<VideoView />
+Links
+[OpenAI](https://openai.com)
+Nested Lists
+- Backend
+  - NestJS
+  - Prisma
+  - PostgreSQL
+
+- Frontend
+  - React Native
+  - Expo
+Task List
+- [x] JWT
+- [x] Prisma
+- [ ] Payments
+- [ ] Notifications
+Collapsible Section
+:::spoiler Authentication Flow
+
+JWT token generated.
+
+Refresh token stored.
+
+:::
+Badge
+[PREMIUM]
+[FREE]
+[PRO]
+[BETA]
+Keyboard Shortcut
+Press <kbd>Ctrl</kbd> + <kbd>C</kbd>
+Math
+$E = mc^2$
+Emoji Support
+🚀 Deployment completed
+🔒 Security enabled
+⚠ Warning
+✅ Success
+❌ Error
