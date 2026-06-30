@@ -1,4 +1,9 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import {
+    IsBoolean,
+    IsInt,
+    IsOptional,
+    IsString,
+} from 'class-validator';
 
 export class CreateCourseDto {
     @IsString()
@@ -14,4 +19,16 @@ export class CreateCourseDto {
     @IsOptional()
     @IsBoolean()
     isPremium?: boolean;
+
+    @IsOptional()
+    @IsInt()
+    xpReward?: number;
+
+    @IsOptional()
+    @IsString()
+    category?: string;
+
+    @IsOptional()
+    @IsString()
+    level?: string;
 }
