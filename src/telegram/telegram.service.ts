@@ -50,30 +50,41 @@ export class TelegramService implements OnModuleInit {
 
 
     async onModuleInit() {
+        console.log("BOT STARTING");
+
         await this.registerHandlers();
 
-        await this.bot.launch();
+        console.log("HANDLERS REGISTERED");
 
-        this.logger.log(
-            "Telegram bot started",
-        );
+        this.bot.catch(async (err, ctx) => {
+            console.error("BOT ERROR:", err);
 
-        this.bot.catch(
-            async (err, ctx) => {
-                console.error(
-                    "BOT ERROR:",
-                    err,
+            try {
+                await ctx.reply(
+                    "Xatolik yuz berdi, qayta urinib ko'ring."
                 );
+            } catch { }
+        });
 
-                try {
-                    await ctx.reply(
-                        "Xatolik yuz berdi, qayta urinib ko'ring."
-                    );
-                } catch { }
-            },
-        );
+        try {
+            await this.bot.telegram.deleteWebhook({
+                drop_pending_updates: true,
+            });
+
+            await this.bot.launch();
+
+            console.log("BOT STARTED");
+
+            this.logger.log(
+                "Telegram bot started",
+            );
+        } catch (err) {
+            console.error(
+                "BOT LAUNCH ERROR:",
+                err,
+            );
+        }
     }
-
     private async registerHandlers() {
         this.bot.start(async (ctx) => {
             await ctx.reply(
