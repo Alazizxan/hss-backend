@@ -13,6 +13,10 @@ import { QuizModule } from './quiz/quiz.module';
 import { AdminModule } from './admin/admin.module';
 import { HackerRoomModule } from './hacker-room/hacker-room.module';
 import { CertificateModule } from './certificate/certificate.module';
+import { CyberLabModule } from './cyber-lab/cyber-lab.module';
+import { TelegramService } from './telegram/telegram.service';
+import { TelegramModule } from './telegram/telegram.module';
+
 
 @Module({
   imports: [
@@ -31,6 +35,9 @@ import { CertificateModule } from './certificate/certificate.module';
     AdminModule,
     HackerRoomModule,
     CertificateModule,
+    CyberLabModule,
+    TelegramModule,
   ],
+  providers: [TelegramService],
 })
 export class AppModule { }

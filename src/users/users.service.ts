@@ -45,22 +45,26 @@ export class UsersService {
         };
     }
 
+    // UsersService ichidagi addXp funksiyasi
     async addXp(userId: string, xp: number) {
+        // 1. XP ni bazada oshirish
         const user = await this.prisma.user.update({
             where: { id: userId },
-            data: {
-                xp: { increment: xp },
-            },
+            data: { xp: { increment: xp } },
         });
 
-        const level = calculateLevel(user.xp);
+        // 2. Yangi darajani hisoblash
+        const newLevel = calculateLevel(user.xp);
 
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                level,
-            },
-        });
+        // 3. Agar daraja haqiqatdan o'zgargan bo'lsa, bazaga yozish
+        if (user.level !== newLevel) {
+            return await this.prisma.user.update({
+                where: { id: userId },
+                data: { level: newLevel },
+            });
+        }
+
+        return user;
     }
 
     async findLeaderboard() {
@@ -71,15 +75,25 @@ export class UsersService {
                 id: true,
                 username: true,
                 xp: true,
-                level: true,
+                level: true, // Bazadagi eski level
             },
         });
 
-        return users.map((u, index) => ({
-            ...u,
-            rank: getRank(u.xp),
-            position: index + 1,
-        }));
+        return users.map((u, index) => {
+            const progress = getLevelProgress(u.xp);
+
+            return {
+                id: u.id,
+                username: u.username,
+                xp: u.xp,
+                // Endi bazadagi levelni emas, progress ichidagi hisoblangan levelni beramiz
+                level: progress.currentLevel,
+                // Agar progressning o'zini ham yubormoqchi bo'lsangiz:
+                levelProgress: progress,
+                rank: getRank(u.xp),
+                position: index + 1,
+            };
+        });
     }
 
     create(data: {
@@ -171,13 +185,15 @@ export class UsersService {
         const leaderboardPosition =
             await this.getUserRankPosition(userId);
 
+        const levelpro = getLevelProgress(user.xp);
+
         return {
             id: user.id,
             username: user.username,
             email: user.email,
 
             xp: user.xp,
-            level: user.level,
+            level: levelpro.currentLevel,
             rank: getRank(user.xp),
 
             position: leaderboardPosition.position,
@@ -317,13 +333,15 @@ export class UsersService {
         const leaderboardPosition =
             await this.getUserRankPosition(userId);
 
+        const levelpro = getLevelProgress(user.xp);
+
         return {
             id: user.id,
             username: user.username,
             email: user.email,
 
             xp: user.xp,
-            level: user.level,
+            level: levelpro.currentLevel,
             rank: getRank(user.xp),
 
             levelProgress,

@@ -18,19 +18,23 @@ model User {
   email        String @unique
   passwordHash String
 
-  xp           Int @default(0)
-  level        Int @default(1)
+  xp    Int @default(0)
+  level Int @default(1)
 
-  role         Role @default(USER)
+  role Role @default(USER)
 
-  isPremium    Boolean @default(false)
+  isPremium    Boolean   @default(false)
   premiumUntil DateTime?
 
-  progress     UserProgress[]
-  userCourseAccess UserCourseAccess[]   // 👈 ADD SHU
-  hackerChats HackerRoomChat[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  progress         UserProgress[]
+  userCourseAccess UserCourseAccess[] // 👈 ADD SHU
+  hackerChats      HackerRoomChat[]
+
+  cyberLabSessions CyberLabSession[]
+  cyberLabReports  CyberLabReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Course {
@@ -41,17 +45,14 @@ model Course {
   isPremium   Boolean @default(false)
   xpReward    Int     @default(100)
 
-  category    String   @default("cybersecurity")
-  level       String   @default("beginner") // beginner | junior | middle | senior
+  category String @default("cybersecurity")
+  level    String @default("beginner") // beginner | junior | middle | senior
 
   PremiumCodes PremiumCode[]
 
   sections Section[]
 
-  userCourseAccess UserCourseAccess[]   // 👈 ADD SHU
-
- 
-
+  userCourseAccess UserCourseAccess[] // 👈 ADD SHU
 
   createdAt DateTime @default(now())
 }
@@ -77,9 +78,9 @@ model Lesson {
   videoUrl String?
   imageUrl String?
 
-  xpReward Int @default(10)
+  xpReward Int   @default(10)
   order    Int
-  quiz Quiz?
+  quiz     Quiz?
 
   sectionId String
   section   Section @relation(fields: [sectionId], references: [id])
@@ -88,14 +89,14 @@ model Lesson {
 model UserProgress {
   id String @id @default(uuid())
 
-  userId   String
-  user     User @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   courseId String
   lessonId String
 
   completed Boolean @default(false)
-  xpEarned  Int @default(0)
+  xpEarned  Int     @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,13 +105,13 @@ model UserProgress {
 }
 
 model PremiumCode {
-  id        String   @id @default(uuid())
-  code      String   @unique
+  id   String @id @default(uuid())
+  code String @unique
 
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
 
-  isUsed    Boolean  @default(false)
+  isUsed Boolean @default(false)
 
   createdAt DateTime @default(now())
 }
@@ -118,8 +119,8 @@ model PremiumCode {
 model UserCourseAccess {
   id String @id @default(uuid())
 
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id])
@@ -132,21 +133,20 @@ model UserCourseAccess {
 }
 
 model UserCourseCompletion {
-  id        String @id @default(uuid())
-  userId    String
-  courseId  String
+  id       String @id @default(uuid())
+  userId   String
+  courseId String
 
-  rewarded  Boolean @default(false)
+  rewarded Boolean @default(false)
 
   createdAt DateTime @default(now())
 
   @@unique([userId, courseId])
 }
 
-
 model Quiz {
-  id       String @id @default(uuid())
-  title    String
+  id    String @id @default(uuid())
+  title String
 
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
@@ -157,40 +157,37 @@ model Quiz {
 }
 
 model Question {
-  id      String @id @default(uuid())
-  text    String
+  id   String @id @default(uuid())
+  text String
 
-  quizId  String
-  quiz    Quiz   @relation(fields: [quizId], references: [id])
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
 
   options Option[]
 }
 
 model Option {
-  id         String @id @default(uuid())
-  text       String
-  isCorrect  Boolean @default(false)
+  id        String  @id @default(uuid())
+  text      String
+  isCorrect Boolean @default(false)
 
   questionId String
   question   Question @relation(fields: [questionId], references: [id])
 }
 
 model QuizResult {
-  id        String @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId    String
-  quizId    String
+  userId String
+  quizId String
 
-  score     Int
-  passed    Boolean
+  score  Int
+  passed Boolean
 
   createdAt DateTime @default(now())
 
   @@unique([userId, quizId])
 }
-
-
-
 
 model QuizAttempt {
   id String @id @default(uuid())
@@ -198,43 +195,40 @@ model QuizAttempt {
   userId String
   quizId String
 
-  score Int
+  score  Int
   passed Boolean
 
   createdAt DateTime @default(now())
 }
-
 
 model HackerRoomMessage {
   id String @id @default(uuid())
 
   userId String
 
-  role String
+  role    String
   content String
 
   createdAt DateTime @default(now())
 }
 
-
 model HackerRoomChat {
-  id        String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  role      String // USER | ASSISTANT
+  role String // USER | ASSISTANT
 
-  message   String   @db.Text
+  message String @db.Text
 
   createdAt DateTime @default(now())
 }
 
-
 model Certificate {
   id String @id @default(uuid())
 
-  userId String
+  userId   String
   courseId String
 
   verifyToken String @unique @default(uuid())
@@ -242,4 +236,178 @@ model Certificate {
   createdAt DateTime @default(now())
 
   @@unique([userId, courseId])
+}
+
+model CyberLab {
+  id String @id @default(uuid())
+
+  code String @unique
+
+  title       String
+  description String @db.Text
+
+  category   String
+  difficulty String
+
+  briefing String @db.Text
+
+  hostname String @default("web-03")
+  username String @default("analyst")
+
+  xpReward Int @default(100)
+
+  estimatedTime Int @default(30)
+
+  fileSystem Json
+  metadata   Json
+  objectives Json
+  flags      Json
+
+
+  rules CyberLabRule[]
+
+  files CyberLabFile[]
+
+  isPublished Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions CyberLabSession[]
+}
+
+model CyberLabSession {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  labId String
+  lab   CyberLab @relation(fields: [labId], references: [id])
+
+  hostname String
+  username String
+
+  currentDirectory String
+
+  commandHistory   Json
+  discoveredFlags  Json
+  environmentState Json
+
+  files CyberLabSessionFile[]
+
+  startedAt DateTime @default(now())
+
+  finishedAt DateTime?
+
+  report CyberLabReport?
+}
+
+model CyberLabReport {
+  id String @id @default(uuid())
+
+  sessionId String          @unique
+  session   CyberLabSession @relation(fields: [sessionId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  score Int
+  grade String
+
+  feedback Json
+
+  xpEarned Int
+
+  createdAt DateTime @default(now())
+}
+
+model CyberLabFile {
+  id String @id @default(uuid())
+
+  labId String
+  lab CyberLab @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  path String
+  name String
+
+  type String // FILE | DIRECTORY
+
+  content String? @db.Text
+
+  permissions String @default("rw-r--r--")
+
+  owner String @default("root")
+  group String @default("root")
+
+  hidden Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([labId])
+  @@index([path])
+}
+
+model CyberLabRule {
+  id String @id @default(uuid())
+
+  labId String
+  lab CyberLab @relation(fields: [labId], references: [id], onDelete: Cascade)
+
+  name String
+
+  triggerType String
+  triggerValue String
+
+  rewardFlag String
+
+  xpReward Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([labId])
+}
+
+
+model CyberLabSessionFile {
+  id String @id @default(uuid())
+
+  sessionId String
+  session CyberLabSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  path String
+  name String
+
+  type String // FILE | DIRECTORY
+
+  content String? @db.Text
+
+  permissions String @default("rw-r--r--")
+
+  owner String @default("root")
+  group String @default("root")
+
+  hidden Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([path])
+}
+
+
+model CyberLabCompletion {
+  id String @id @default(uuid())
+
+  userId String
+  labId String
+
+  bestScore Int @default(0)
+  attempts Int @default(0)
+
+  xpRewarded Boolean @default(false)
+
+  completedAt DateTime @default(now())
+
+  @@unique([userId, labId])
 }
