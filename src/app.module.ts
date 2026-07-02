@@ -14,7 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { HackerRoomModule } from './hacker-room/hacker-room.module';
 import { CertificateModule } from './certificate/certificate.module';
 import { CyberLabModule } from './cyber-lab/cyber-lab.module';
-import { TelegramService } from './telegram/telegram.service';
+
 import { TelegramModule } from './telegram/telegram.module';
 
 
@@ -38,6 +38,5 @@ import { TelegramModule } from './telegram/telegram.module';
     CyberLabModule,
     TelegramModule,
   ],
-  providers: [TelegramService],
 })
 export class AppModule { }

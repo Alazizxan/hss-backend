@@ -36,54 +36,44 @@ export class TelegramService implements OnModuleInit {
     constructor(
         private readonly prisma: PrismaService,
     ) {
+        console.log(
+            "TelegramService instance:",
+            Math.random(),
+        );
+
         this.bot = new Telegraf(
             process.env.TELEGRAM_BOT_TOKEN!,
         );
-        this.bot.catch((err, ctx) => {
-            console.error(
-                "Telegram bot error:",
-                err,
-            );
-        });
     }
 
 
 
     async onModuleInit() {
-        console.log("BOT STARTING");
+        console.log(
+            "BOT STARTING"
+        );
 
         await this.registerHandlers();
 
-        console.log("HANDLERS REGISTERED");
+        console.log(
+            "HANDLERS REGISTERED"
+        );
 
-        this.bot.catch(async (err, ctx) => {
-            console.error("BOT ERROR:", err);
-
-            try {
-                await ctx.reply(
-                    "Xatolik yuz berdi, qayta urinib ko'ring."
+        this.bot.launch()
+            .then(() => {
+                console.log(
+                    "BOT STARTED"
                 );
-            } catch { }
-        });
-
-        try {
-            await this.bot.telegram.deleteWebhook({
-                drop_pending_updates: true,
+            })
+            .catch((err) => {
+                console.error(
+                    err,
+                );
             });
+    }
 
-            await this.bot.launch();
-
-            console.log("BOT STARTED");
-
-            this.logger.log(
-                "Telegram bot started",
-            );
-        } catch (err) {
-            console.error(
-                "BOT LAUNCH ERROR:",
-                err,
-            );
-        }
+    async onModuleDestroy() {
+        this.bot.stop();
     }
     private async registerHandlers() {
         this.bot.start(async (ctx) => {
